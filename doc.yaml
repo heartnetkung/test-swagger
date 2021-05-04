@@ -1,0 +1,76 @@
+openapi: 3.0.0
+servers: 
+  - url: http://localhost:3000/app
+info:
+  title: Freshjob Server
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+paths:
+  /users:
+    get:
+      description: Returns a list of users.
+      tags: 
+        - /users
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
+  /users/url_params/{user_id}:
+    get:
+      description: Returns the given user.
+      tags: 
+        - /users
+        - phase1
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          example: 1
+      responses:
+        '200':
+          description: A user
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/demo_user'
+        '400_1':
+          description: 'user_id not found'
+        '400_2':
+          description: 'user_id must be number'
+        '400':
+          $ref: '#/components/responses/400aa'
+components:
+  schemas:
+    User:
+      description: 'This is additional description.'
+    demo_user:
+      type: object
+      properties:
+        user_id:
+          type: integer
+      required:
+        - user_id
+      example:
+        user_id: 1
+  responses:
+    400aa:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              data:
+                type: object
+            required:
+              - error
+tags:
+  - name: phase1
+  - name: /users
+    description: 'This is additional description2.'
